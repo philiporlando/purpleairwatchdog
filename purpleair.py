@@ -44,22 +44,24 @@ class Gmail(object):
 	def send_message(self, subject, body):
 
 		headers = [
-			"From: " + self.email,
-			"Subject: " + subject,
-			"To: " + self.recipient,
-			"MIME-Version: 1.0",
-			"Content-Type: text/html"]
+			"From: " + self.email
+			,"Subject: " + subject
+			,"To: " + self.recipient
+			,"MIME-Version: 1.0"
+			,"Content-Type: text/html"
+		]
 
 		headers = "\r\n".join(headers)
 		self.session.sendmail(
-			self.email,
-			self.recipient,
-			headers + "\r\n\r\n" + body)
+			self.email
+			,self.recipient
+			,headers + "\r\n\r\n" + body
+		)
 
 
 ## define email parameters:
-sender = 'SENDER_EMAIL_ADDRESS_HERE'
-recipient = 'RECIPIENT_EMAIL_ADDRESS_HERE'
+sender = 'SENDER_EMAIL_ADDRESS_HERE' ## change this to your email
+recipient = 'RECIPIENT_EMAIL_ADDRESS_HERE'## change this to your email
 
 ## secured raw_input for email password
 email_password = getpass.getpass('[*] Enter the email server password: ')
