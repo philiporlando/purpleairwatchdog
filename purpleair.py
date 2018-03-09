@@ -191,5 +191,5 @@ while True:
 		except Exception as e:
 			print '[*] Delivery to ', recipient, 'failed!'
 			print e
-			print '[*] Will try again in one hour....'
+			print '[*] Will try again in 15 minutes....'
 			time.sleep(sleep_time)
