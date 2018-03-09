@@ -193,6 +193,3 @@ while True:
 			print e
 			print '[*] Will try again in one hour....'
 			time.sleep(sleep_time)
-
-	# empty our list of offline sensors each day
-	#offline_sensors[:] = []
