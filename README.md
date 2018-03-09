@@ -2,7 +2,7 @@
 
 This is a simple python2 script designed to detect when the [Sustainable Atmospheres Research Lab](https://star.research.pdx.edu/)'s [PurpleAir sensors](https://www.purpleair.com/) stop uploading to their respective API. 
 
-The script scans PurpleAir's API every 15 minutes. If a sensor goes offline for more than 1 hour, an email is sent to the user. The offending sensor ID is also appended to a list of `offline_sensors` to prevent multiple emails being sent per day. This list is cleared every 24 hours, to remind the user if a sensor has been offline fore consecutive days. 
+The script scans PurpleAir's API every 15 minutes. If a sensor goes offline for more than 1 hour, an email is sent to the user. The offending sensor ID is also appended to a list of `offline_sensors` to prevent multiple emails being sent per day. This list is cleared every 24 hours, to remind the user if a sensor has been offline over consecutive days. 
 
 The email class was developed with gmail accounts in mind. It may not work with other `SENDER` addresses.
 
