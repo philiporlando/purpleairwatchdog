@@ -162,7 +162,7 @@ while True:
 						print '[*] Sensor', sensor['Label'], 'went offline at', datetime.fromtimestamp(sensor['LastSeen'])
 						down_sensor = str(sensor['Label'])
 						down_ID = str(sensor['ID'])
-						offline_sensors.append(down_ID) ## this could be better handled with files, avoiding dupe emails when restarting the program more than once per day (if needed due to an exception)
+						offline_sensors.append(down_ID) ## this could be handled better with files
 						## send email
 						msg = 'has been down since ' + str(datetime.fromtimestamp(sensor['LastSeen']))
 						gm = Gmail(sender, recipient,  email_password)
