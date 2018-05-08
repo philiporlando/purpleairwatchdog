@@ -5,7 +5,7 @@
 ##### Created by: Philip Orlando
 ##### Sustainable Atmospheres Research Lab
 ##### Portland State University
-##### 2018-03-08
+##### 2018-02-15
 
 import json
 import urllib
@@ -44,31 +44,39 @@ class Gmail(object):
 	def send_message(self, subject, body):
 
 		headers = [
-			"From: " + self.email
-			,"Subject: " + subject
-			,"To: " + self.recipient
-			,"MIME-Version: 1.0"
-			,"Content-Type: text/html"
-		]
+			"From: " + self.email,
+			"Subject: " + subject,
+			"To: " + self.recipient,
+			"MIME-Version: 1.0",
+			"Content-Type: text/html"]
 
 		headers = "\r\n".join(headers)
 		self.session.sendmail(
-			self.email
-			,self.recipient
-			,headers + "\r\n\r\n" + body
-		)
+			self.email,
+			self.recipient,
+			headers + "\r\n\r\n" + body)
 
 
 ## define email parameters:
-sender = 'SENDER_EMAIL_ADDRESS_HERE' ## change this to your email
-recipient = 'RECIPIENT_EMAIL_ADDRESS_HERE'## change this to your email
+sender = 'phlp.orlando@gmail.com'
+
+##recipient = 'h6lg@pdx.edu'
+recipient = 'porlando@pdx.edu'
 
 ## secured raw_input for email password
 email_password = getpass.getpass('[*] Enter the email server password: ')
 
-## creating a list of sensor IDs for our research lab
+## creating a list of sensor IDs
 sensorID = [3786 ## PSU Star Lab Cully
 	,3787 ## PSU Star Lab Cully B
+	#,3357 ## Irvington
+	#,3358 ## Irvington B
+	#,5826 ## NE 12th & Tillamook
+	#,5827 ## NE 12th & Tillamook B
+	#,7018 ## Miller
+	#,7019 ## Miller B
+	#,2317 ## Portsmouth Portland
+	#,2318 ## Portsmouth Portland B
 	,2037 ## PSU STAR Lab Hayden Island
 	,2038 ## PSU STAR Lab Hayden Island B
 	,1606 ## PSU STAR Lab Roof North
@@ -89,17 +97,38 @@ sensorID = [3786 ## PSU Star Lab Cully
 	,2044 ## STAR Lab Creston Kenilworth B
 	,2057 ## STAR Lab Homestead Neighborhood
 	,2058 ## STAR Lab Homestead Neighborhood B
-	,2033 ## STAR Lab Jesuit
-	,2034 ## STAR Lab Jesuit B
 	,2053 ## STAR Lab Powell-Hurst Gilbert
-	,2054 ## STAR Lab Powell0Hurst Gilbert B
+	,2054 ## Star Lab Powell0Hurst Gilbert B
+	,3707 ## STAR Jesuit HS
+	,3708 ## STAR Jesuit HS B
+	,3729 ## PSU STAR Lab Edgewater
+	,3730 ## PSU STAR Lab Edgewater B
+	,3684 ## Lower Boones Ferry
+	,3685 ## Lower Boones Ferry B
+	,3775 ## PSU STAR Lab Lost Park
+	,3776 ## PSU STAR Lab Lost Park B
+	#,2033 ## Star Lab Jesuit
+	#,2034 ## Star Lab Jesuit B
+
+	#,2566 ## VerdeVista
+	#,2567 ## VerdeVista B
+	#,3404 ## Woods Park
+	#,3405 ## Woods Park B
+	#,3281 ## Red Fox Hills
+	#,3282 ## Red Fox Hills B
+	#,3233 ## Marion Court Apartments
+	#,3234 ## Marion Court Apartments B
+	#,2741 ## College Park
+	#,2742 ## College Park B
 	]
 
 
 ## establish downtime intervals
 downHour = int(60**2)
 downDay = int(60*60*24)
-sleep_time = int(60*15) ## 15-minute scan interval
+#downDay = int(60)
+#sleep_time = int(30)
+sleep_time = int(60*15) ## 15-minute scan
 
 ## wrap our algo into a while loop:
 while True:
@@ -110,13 +139,11 @@ while True:
 	nextDay = startTime + downDay
 
 	try:
-    ## clear the list of offline sensors each day
 		del(offline_sensors[:])
 
 	except Exception:
 		pass
 
-  ## store offline sensors within this list
 	offline_sensors = []
 
 	while  calendar.timegm(datetime.utcnow().utctimetuple()) < nextDay:
@@ -143,10 +170,8 @@ while True:
 
 
 		try:
-    
 			## parse the JSON returned from the request
 			j = r.json()
-      
 		except Exception as e:
 			print '[*] Unable to parse JSON'
 			print e
@@ -164,7 +189,7 @@ while True:
 						print '[*] Sensor', sensor['Label'], 'went offline at', datetime.fromtimestamp(sensor['LastSeen'])
 						down_sensor = str(sensor['Label'])
 						down_ID = str(sensor['ID'])
-						offline_sensors.append(down_ID) ## this could be handled better with files
+						offline_sensors.append(down_ID) ## this could be better handled with files, avoiding dupe emails when restarting the program more than once per day (if needed due to an exception)
 						## send email
 						msg = 'has been down since ' + str(datetime.fromtimestamp(sensor['LastSeen']))
 						gm = Gmail(sender, recipient,  email_password)
@@ -193,5 +218,8 @@ while True:
 		except Exception as e:
 			print '[*] Delivery to ', recipient, 'failed!'
 			print e
-			print '[*] Will try again in 15 minutes....'
+			print '[*] Will try again in one hour....'
 			time.sleep(sleep_time)
+
+	# empty our list of offline sensors each day
+	#offline_sensors[:] = []
